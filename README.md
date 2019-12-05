@@ -44,6 +44,8 @@ Feel free to report an issue on github or contact me privately if you prefer.
 
 ### Thanks:
 
-* Richard Burton for image format details: http://richard.burtons.org/2015/05/17/esp8266-boot-process/
+* Richard Burton for:
+  * image format details: http://richard.burtons.org/2015/05/17/esp8266-boot-process/
+  * rBoot: https://github.com/raburton/rboot
 * Max Filippov (**jcmvbkbc**) for bootrom.bin: https://github.com/jcmvbkbc/esp-elf-rom
 * Fredrik Ahlberg (**themadinventor**) for the IDA plugin and esptool.

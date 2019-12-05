@@ -10,9 +10,9 @@ from esp_elf import XtensaElf, ElfSection, default_section_settings
 from esp_bootrom import get_bootrom_contents, symbols
 
 
-def parse_rom(rom_name, rom_filename, flash_layout):
+def parse_rom(rom_name, rom_filename, flash_layout, offset=0):
     with open(rom_filename, 'rb') as f:
-        rom = EspRom(rom_name, f, flash_layout)
+        rom = EspRom(rom_name, f, flash_layout, offset=offset)
 
     return rom
 
