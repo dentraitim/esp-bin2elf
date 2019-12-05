@@ -61,7 +61,7 @@ class EspRomHeader(object):
             return EspRomE4Header(rom_bytes_stream)
         else:
             raise RomParseException(
-                "EspRomHeader.get_header: unrecognized magic_number 0x%02x" % header_type)
+                "EspRomHeader.get_header: Unrecognized magic_number 0x%02x" % header_type)
 
     def __init__(self):
         pass
