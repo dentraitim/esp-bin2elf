@@ -9,6 +9,7 @@ from esp_rom import EspRom
 from esp_elf import XtensaElf, ElfSection, default_section_settings
 from esp_bootrom import get_bootrom_contents, symbols
 
+
 def parse_rom(rom_name, rom_filename, flash_layout):
     with open(rom_filename, 'rb') as f:
         rom = EspRom(rom_name, f, flash_layout)
@@ -25,7 +26,7 @@ def name_sections(rom):
     print("if defaults are unavailable for a name, generic values will be used.")
 
     for section in rom.sections:
-        name = input("enter a name for 0x%04x> " % (section.address))
+        name = input("enter a name for 0x%04x> " % section.address)
         addr_to_section_name_mapping[section.address] = name
 
     return addr_to_section_name_mapping
@@ -40,7 +41,7 @@ def convert_rom_to_elf(esp_rom, addr_to_section_name_mapping, filename_to_write=
 
     for section in esp_rom.sections:
         if section.address not in addr_to_section_name_mapping:
-            print("generation failed: no name for 0x%04x." % (section.address))
+            print("generation failed: no name for 0x%04x." % section.address)
             return None
 
         name = addr_to_section_name_mapping[section.address]

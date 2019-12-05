@@ -7,6 +7,7 @@ from esp_memory_map import find_region_for_address
 from io import BytesIO
 from struct import pack, unpack
 
+
 class EspRom(object):
     def __init__(self, rom_name, rom_bytes_stream, flash_layout):
         self.name = rom_name
@@ -40,10 +41,10 @@ class EspRom(object):
 
     def __str__(self):
         rep = "EspRom("
-        rep += "name: %s, " % (self.name)
-        rep += "header: %s, " % (self.header)
-        rep += "len(sections): %s, " % (len(self.sections))
-        rep += "len(contents): %s)" % (len(self.contents))
+        rep += "name: %s, " % self.name
+        rep += "header: %s, " % self.header
+        rep += "len(sections): %s, " % len(self.sections)
+        rep += "len(contents): %s)" % len(self.contents)
 
         return rep
 
@@ -52,7 +53,7 @@ class EspRomHeader(object):
     @staticmethod
     def get_header(rom_bytes_stream):
         header_type = rom_bytes_stream.read(1)[0]
-        rom_bytes_stream.seek(-1, 1) # relative position
+        rom_bytes_stream.seek(-1, 1)    # relative position
 
         if header_type == 0xe9:
             return EspRomE9Header(rom_bytes_stream)
@@ -60,8 +61,7 @@ class EspRomHeader(object):
             return EspRomE4Header(rom_bytes_stream)
         else:
             raise RomParseException(
-                "EspRomHeader.get_header: unrecognized magic_number 0x%02x"
-                    % (header_type))
+                "EspRomHeader.get_header: unrecognized magic_number 0x%02x" % header_type)
 
     def __init__(self):
         pass
@@ -83,13 +83,11 @@ class EspRomE9Header(EspRomHeader):
 
         if len(rom_header_bytes) != EspRomE9Header.ROM_HEADER_SIZE:
             raise RomParseException(
-                "EspRomE9Header.init(): len(rom_header_bytes) is %d bytes != 8 bytes."
-                    % (len(rom_header_bytes)))
+                "EspRomE9Header.init(): len(rom_header_bytes) is %d bytes != 8 bytes." % len(rom_header_bytes))
 
         if rom_header_bytes[0] != 0xe9:
             raise RomParseException(
-                "EspRomE9Header.init(): magic_number is 0x%02x != 0xe9."
-                    % (rom_header_bytes[0]))
+                "EspRomE9Header.init(): magic_number is 0x%02x != 0xe9." % rom_header_bytes[0])
 
         self.magic = rom_header_bytes[0]
         self.sect_count = rom_header_bytes[1]
@@ -99,16 +97,17 @@ class EspRomE9Header(EspRomHeader):
 
         super(EspRomE9Header, self).__init__()
 
-    def is_new(self):
+    @staticmethod
+    def is_new():
         return False
 
     def __str__(self):
         rep = "EspRomE9Header("
-        rep += "magic: 0x%02x, " % (self.magic)
-        rep += "sect_count: %d, " % (self.sect_count)
-        rep += "flags1: 0x%02x, " % (self.flags1)
-        rep += "flags2: 0x%02x, " % (self.flags2)
-        rep += "entry_addr: 0x%04x)" % (self.entry_addr)
+        rep += "magic: 0x%02x, " % self.magic
+        rep += "sect_count: %d, " % self.sect_count
+        rep += "flags1: 0x%02x, " % self.flags1
+        rep += "flags2: 0x%02x, " % self.flags2
+        rep += "entry_addr: 0x%04x)" % self.entry_addr
 
         return rep
 
@@ -130,21 +129,18 @@ class EspRomE4Header(EspRomHeader):
 
         if len(rom_header_bytes) != EspRomE4Header.ROM_HEADER_SIZE:
             raise RomParseException(
-                "EspRomE4Header.init(): len(rom_header_bytes) is %d bytes != 16 bytes."
-                    % (len(rom_header_bytes)))
+                "EspRomE4Header.init(): len(rom_header_bytes) is %d bytes != 16 bytes." % len(rom_header_bytes))
 
-        if rom_header_bytes[0] != '\xe4':
+        if rom_header_bytes[0] != 0xe4:
             raise RomParseException(
-                "EspRomE4Header.init(): magic1 is %s != 0xe4."
-                    % (rom_header_bytes[0]))
+                "EspRomE4Header.init(): magic1 is 0x%02x != 0xe4." % rom_header_bytes[0])
 
-        if rom_header_bytes[1] != '\x04':
+        if rom_header_bytes[1] != 0x04:
             raise RomParseException(
-                "EspRomE4Header.init(): magic2 is %s != 0x04."
-                    % (rom_header_bytes[1]))
+                "EspRomE4Header.init(): magic2 is 0x%02x != 0x04." % rom_header_bytes[1])
 
-        self.magic1 = unpack('<B', rom_header_bytes[0])[0]
-        self.magic2 = unpack('<B', rom_header_bytes[1])[0]
+        self.magic1 = rom_header_bytes[0]
+        self.magic2 = rom_header_bytes[1]
         self.config = unpack('<BB', rom_header_bytes[2:4])
         self.entry_addr = unpack('<I', rom_header_bytes[4:8])[0]
         self.unused = unpack('<BBBB', rom_header_bytes[8:12])
@@ -152,17 +148,18 @@ class EspRomE4Header(EspRomHeader):
 
         super(EspRomE4Header, self).__init__()
 
-    def is_new(self):
+    @staticmethod
+    def is_new():
         return True
 
     def __str__(self):
         rep = "EspRomE4Header("
-        rep += "magic1: 0x%02x, " % (self.magic1)
-        rep += "magic2: 0x%02x, " % (self.magic2)
-        rep += "config: %d, " % (self.config)
-        rep += "entry_addr: 0x%04x, " % (self.entry_addr)
-        rep += "unused: 0x%02x, " % (self.unused)
-        rep += "length: %d)" % (self.length)
+        rep += "magic1: 0x%02x, " % self.magic1
+        rep += "magic2: 0x%02x, " % self.magic2
+        rep += "config: %d, " % self.config
+        rep += "entry_addr: 0x%04x, " % self.entry_addr
+        rep += "unused: 0x%02x, " % self.unused
+        rep += "length: %d)" % self.length
 
         return rep
 
@@ -181,8 +178,7 @@ class EspRomSection(object):
 
             if len(section_header_bytes) != EspRomSection.SECTION_HEADER_SIZE:
                 raise RomParseException(
-                    "EspRomSection.init(): section_header_bytes is %d bytes != 8 bytes."
-                        % (len(section_header_bytes)))
+                    "EspRomSection.init(): section_header_bytes is %d bytes != 8 bytes." % len(section_header_bytes))
 
             self.address = unpack('<I', section_header_bytes[0:4])[0]
             self.length = unpack('<I', section_header_bytes[4:8])[0]
@@ -196,13 +192,13 @@ class EspRomSection(object):
 
         if len(self.contents) != self.length:
             raise RomParseException(
-                "EspRomSection.init(): self.contents is %d bytes != self.length %d."
-                    % (len(self.contents), self.length))
+                "EspRomSection.init(): self.contents is %d bytes != self.length %d." %
+                (len(self.contents), self.length))
 
     def __str__(self):
         rep = "EspRomSection("
-        rep += "address: 0x%04x, " % (self.address)
-        rep += "length: %d)" % (self.length)
+        rep += "address: 0x%04x, " % self.address
+        rep += "length: %d)" % self.length
 
         return rep
 

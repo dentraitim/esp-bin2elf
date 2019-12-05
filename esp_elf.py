@@ -6,12 +6,13 @@ from elffile import ElfFileIdent, ElfFileHeader32l, ElfFile32l, ElfSectionHeader
 from esp_elf_pack import pack_elf, pack_symbol
 from esp_memory_map import is_code, is_data
 
+
 class XtensaElf(object):
     def __init__(self, elf_name, entry_addr):
         ident = ElfFileIdent()
 
         ident.abiversion = 0         # 0
-        ident.elfClass =  1          # ELFCLASS32
+        ident.elfClass = 1           # ELFCLASS32
         ident.elfData = 1            # ELFDATA2LSB
         ident.fileVersion = 1        # 1
         ident.magic = '\x7fELF'      # ELF'
@@ -40,7 +41,7 @@ class XtensaElf(object):
         self.symbol_table = ElfSymbolTable()
 
         self.sections = []
-        self.add_section(NullSection(), True) # generate null ph entry
+        self.add_section(NullSection(), True)   # generate null ph entry
         self.add_section(self.string_table)
         self.add_section(self.symbol_table)
 
@@ -118,7 +119,7 @@ class ElfSection(object):
         elif is_data(section_address):
             settings_to_use = dataSettings
         else:
-            raise Exception("can't find settings for 0x%08x" % (section_address))
+            raise Exception("can't find settings for 0x%08x" % section_address)
 
         header.type = settings_to_use.type
         header.addralign = settings_to_use.addralign
@@ -210,29 +211,30 @@ class SymbolTableEntry(object):
 
 
 class SectionSettings(object):
-    def __init__(self, type, addralign, flags):
-        self.type = type
+    def __init__(self, sectype, addralign, flags):
+        self.type = sectype
         self.addralign = addralign
         self.flags = flags
 
-# section_types:
-SHT_NULL     = 0
-SHT_PROGBITS = 1
-SHT_SYMTAB   = 2
-SHT_STRTAB   = 3
-SHT_NOBITS   = 8
 
-codeSettings = SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x6)
-dataSettings = SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x3)
+# section_types:
+SHT_NULL = 0
+SHT_PROGBITS = 1
+SHT_SYMTAB = 2
+SHT_STRTAB = 3
+SHT_NOBITS = 8
+
+codeSettings = SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x6)
+dataSettings = SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x3)
 
 default_section_settings = {
-  '':              SectionSettings(type=SHT_NULL,     addralign=1, flags=0x0),
-  '.data':         SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x3),
-  '.rodata':       SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x2),
-  '.bss':          SectionSettings(type=SHT_NOBITS,   addralign=1, flags=0x3),
-  '.text':         SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x6),
-  '.irom0.text':   SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x6),
-  '.bootrom.text': SectionSettings(type=SHT_PROGBITS, addralign=1, flags=0x6),
-  '.shstrtab':     SectionSettings(type=SHT_STRTAB,   addralign=1, flags=0x0),
-  '.symtab':       SectionSettings(type=SHT_SYMTAB,   addralign=1, flags=0x0)
+    '': SectionSettings(sectype=SHT_NULL, addralign=1, flags=0x0),
+    '.data': SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x3),
+    '.rodata': SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x2),
+    '.bss': SectionSettings(sectype=SHT_NOBITS, addralign=1, flags=0x3),
+    '.text': SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x6),
+    '.irom0.text': SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x6),
+    '.bootrom.text': SectionSettings(sectype=SHT_PROGBITS, addralign=1, flags=0x6),
+    '.shstrtab': SectionSettings(sectype=SHT_STRTAB, addralign=1, flags=0x0),
+    '.symtab': SectionSettings(sectype=SHT_SYMTAB, addralign=1, flags=0x0)
 }
