@@ -7,8 +7,8 @@ def get_bootrom_contents():
     return open('bootrom.bin', 'rb').read()
 
 
-# boomrom symbols are listed here:
-# https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/ld/eagle.rom.addr.v6.ld
+# bootrom symbols are listed here:
+# https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/components/esp8266/ld/esp8266.rom.ld
 
 symbols = {
     'SPI_sector_erase': 0x400040c0,
@@ -65,4 +65,18 @@ symbols = {
     'strncmp': 0x40002ab8,
     'strncpy': 0x40002a98,
     'strstr': 0x40002ad8,
+
+    'gpio_input_get': 0x40004cf0,
+    'gpio_pin_wakeup_disable': 0x40004ed4,
+    'gpio_pin_wakeup_enable': 0x40004e90,
+
+    'ets_io_vprintf': 0x40001f00,
+    'uart_rx_one_char': 0x40003b8c,
+
+    'rom_i2c_readReg': 0x40007268,
+    'rom_i2c_readReg_Mask': 0x4000729c,
+    'rom_i2c_writeReg': 0x400072d8,
+    'rom_i2c_writeReg_Mask': 0x4000730c,
+
+    'rom_software_reboot': 0x40000080,
 }
