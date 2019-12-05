@@ -31,17 +31,17 @@ class FlashDataSection(object):
 layout_without_ota_updates = {
     '.text': FlashDataSection(0x00000, 248, '.text', 'User Application'),
     '.irom0.text': FlashDataSection(0x40000, 240, '.irom0.text', 'SDK libraries')
-    # RomDataSection(0x3e000, 8, '.master_device_key', 'OTA device key')
-    # RomDataSection(0x7c000, 8, '.esp_init_data_default', 'Default config'),
-    # RomDataSection(0x7e000, 8, '.blank', 'Wifi configuration?')
+    # FlashDataSection(0x3e000, 8, '.master_device_key', 'OTA device key')
+    # FlashDataSection(0x7c000, 8, '.esp_init_data_default', 'Default config'),
+    # FlashDataSection(0x7e000, 8, '.blank', 'Wifi configuration?')
 }
 
 ota_slot_one = {
     '.text': FlashDataSection(0x01000, 64, '.text', 'User Application, slot 1'),
     '.irom0.text': FlashDataSection(0x11000, 180, '.irom0.text', 'SDK libraries, slot 1')
-    # RomDataSection(0x3e000, 8, '.master_device_key', 'OTA device key')
-    # RomDataSection(0x40000, 4, '.unused', 'Unused')
-    # RomDataSection(0x7e000, 8, '.blank', 'Wifi configuration?')
+    # FlashDataSection(0x3e000, 8, '.master_device_key', 'OTA device key')
+    # FlashDataSection(0x40000, 4, '.unused', 'Unused')
+    # FlashDataSection(0x7e000, 8, '.blank', 'Wifi configuration?')
 }
 
 
@@ -53,9 +53,9 @@ def make_slot_two_layout(flash_size):
     return {
         '.text': FlashDataSection(text_off, 64, '.text', 'User Application, slot 2'),
         '.irom0.text': FlashDataSection(irom_off, 180, '.irom0.text', 'SDK libraries, slot 2')
-        # RomDataSection(0x3e000, 8, '.master_device_key', 'OTA device key')
-        # RomDataSection(0x40000, 4, '.unused', 'Unused')
-        # RomDataSection(0x7e000, 8, '.blank', 'Wifi configuration?')
+        # FlashDataSection(0x3e000, 8, '.master_device_key', 'OTA device key')
+        # FlashDataSection(0x40000, 4, '.unused', 'Unused')
+        # FlashDataSection(0x7e000, 8, '.blank', 'Wifi configuration?')
     }
 
 

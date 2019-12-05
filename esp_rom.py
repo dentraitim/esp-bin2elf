@@ -2,6 +2,8 @@
 #
 # MIT licence
 
+# reference: https://github.com/espressif/esptool/wiki/Firmware-Image-Format
+
 from esp_memory_map import find_region_for_address
 
 from io import BytesIO
@@ -62,9 +64,6 @@ class EspRomHeader(object):
         else:
             raise RomParseException(
                 "EspRomHeader.get_header: Unrecognized magic_number 0x%02x" % header_type)
-
-    def __init__(self):
-        pass
 
 
 class EspRomE9Header(EspRomHeader):
