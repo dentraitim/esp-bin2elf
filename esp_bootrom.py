@@ -3,7 +3,7 @@
 # MIT licence
 
 def get_bootrom_contents():
-    return open('bootrom.bin').read()
+    return open('bootrom.bin', 'rb').read()
 
 # boomrom symbols are listed here:
 # https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/ld/eagle.rom.addr.v6.ld

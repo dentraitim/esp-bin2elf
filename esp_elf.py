@@ -94,7 +94,7 @@ class XtensaElf(object):
         self.elf.fileHeader.phoff = offset
 
     def write_to_file(self, filename_to_write):
-        with open(filename_to_write, 'w') as f:
+        with open(filename_to_write, 'wb') as f:
             f.write(pack_elf(self.elf))
 
 
