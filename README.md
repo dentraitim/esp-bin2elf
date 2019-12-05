@@ -8,9 +8,14 @@ Tested in IDA Pro with the excellent [Xtensa processor plugin](https://github.co
 
 Once you have your ELF loaded, you can + should leverage the [rizzo IDA plugin](https://github.com/devttys0/ida) to identify common functions from the SDK and RTOS examples.
 
+Alternatively, the ELF can be used with [Radare2](https://rada.re/) and/or [Cutter](https://cutter.re/).
+
 ### Requirements:
 
-Install the 'elffile' python module before using this.
+- Python 3
+- `elffile` - https://pypi.org/project/elffile/
+
+The original `elffile` project seems abandoned, but a fork is available here: https://github.com/slorquet/elffile2
 
 ### Usage:
 
@@ -24,7 +29,7 @@ section_names = esp_bin2elf.name_sections(rom)
 elf = esp_bin2elf.convert_rom_to_elf(rom, section_names, 'flash_bin.elf')
 ```
 
-Then run `readelf -a flash_bin.elf` and make sure things look ok.
+Run the code and make sure things look ok.
 
 ### Feedback and issues:
 
