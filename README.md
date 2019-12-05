@@ -23,8 +23,15 @@ The original `elffile` project seems abandoned, but a fork is available here: ht
 import esp_bin2elf
 import flash_layout
 
+# Load image
 flash_layout = flash_layout.layout_without_ota_updates
 rom = esp_bin2elf.parse_rom('flashdump.bin', 'path/to/flashdump.bin', flash_layout)
+
+print(rom)
+for section in rom.sections:
+    print(section)
+
+# Generate ELF
 section_names = esp_bin2elf.name_sections(rom)
 elf = esp_bin2elf.convert_rom_to_elf(rom, section_names, 'flash_bin.elf')
 ```
