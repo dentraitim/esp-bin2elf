@@ -4,7 +4,7 @@
 
 from esp_memory_map import find_region_for_address
 
-from StringIO import StringIO
+from io import StringIO
 from struct import pack, unpack
 
 class EspRom(object):
