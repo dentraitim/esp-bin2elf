@@ -118,7 +118,7 @@ class ElfSection(object):
         elif is_data(section_address):
             settings_to_use = dataSettings
         else:
-            raise Exception("can't find settings for %x" % (section_adddress))
+            raise Exception("can't find settings for 0x%08x" % (section_address))
 
         header.type = settings_to_use.type
         header.addralign = settings_to_use.addralign
