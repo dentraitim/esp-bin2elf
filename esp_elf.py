@@ -154,19 +154,19 @@ class ElfSection(object):
 
 class NullSection(ElfSection):
     def __init__(self):
-        super(NullSection, self).__init__('', 0x0, '')
+        super(NullSection, self).__init__('', 0x0, b'')
 
 
 class ElfStringTable(ElfSection):
     def __init__(self):
         self.string_to_offset = {'': 0}
 
-        super(ElfStringTable, self).__init__('.shstrtab', 0x0, '\x00')
+        super(ElfStringTable, self).__init__('.shstrtab', 0x0, b'\x00')
 
     def add_string(self, string):
         if string not in self.string_to_offset:
             self.string_to_offset[string] = len(self.header.content)
-            self.append_to_content(string + '\x00')
+            self.append_to_content(string.encode('utf-8') + b'\x00')
 
         return self.get_index(string)
 
@@ -176,14 +176,14 @@ class ElfStringTable(ElfSection):
 
 class ElfSymbolTable(ElfSection):
     def __init__(self):
-        super(ElfSymbolTable, self).__init__('.symtab', 0x0, '')
+        super(ElfSymbolTable, self).__init__('.symtab', 0x0, b'')
 
-        self.append_to_content('\x00' * 16)   # first entry is null symbol
-        self.header.entsize = 16              # sizeof(Elf32_sym)
+        self.append_to_content(b'\x00' * 16)    # first entry is null symbol
+        self.header.entsize = 16                # sizeof(Elf32_sym)
         self.symbols = []
 
     def set_link(self, link):
-        self.header.link = link               # index of .shstrtab
+        self.header.link = link                 # index of .shstrtab
 
     def add_symbol(self, name, address, section_name):
         self.symbols.append((name, address, section_name))
