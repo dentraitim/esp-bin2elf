@@ -13,30 +13,24 @@ Alternatively, the ELF can be used with [Radare2](https://rada.re/) and/or [Cutt
 ### Requirements:
 
 - Python 3
+- `esptool.py` - https://github.com/espressif/esptool
 - `elffile` - https://pypi.org/project/elffile/
 
 The original `elffile` project seems abandoned, but a fork is available here: https://github.com/slorquet/elffile2
 
 ### Usage:
-
-```python
-import esp_bin2elf
-import flash_layout
-
-# Load image
-flash_layout = flash_layout.layout_without_ota_updates
-rom = esp_bin2elf.parse_rom('flashdump.bin', 'path/to/flashdump.bin', flash_layout)
-
-print(rom)
-for section in rom.sections:
-    print(section)
-
-# Generate ELF
-section_names = esp_bin2elf.name_sections(rom)
-elf = esp_bin2elf.convert_rom_to_elf(rom, section_names, 'flash_bin.elf')
+#### Dump flash
+- Connect usb cable to esp8266
+```sh
+./dump_flash.sh
 ```
+- This will generate flash_4M.bin
 
-Run the code and make sure things look ok.
+#### Extract flash to user application and convert to elf file
+```sh
+./esp_extract_flash.sh flash_4M.bin out_user_irom.bin
+```
+- This will generate out_user_irom.bin (User Application), out_user_irom.bin.elf (Elf file)
 
 ### Feedback and issues:
 

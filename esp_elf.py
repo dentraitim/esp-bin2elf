@@ -4,7 +4,6 @@
 
 from elffile import ElfFileIdent, ElfFileHeader32l, ElfFile32l, ElfSectionHeader32l, ElfProgramHeader32l
 from esp_elf_pack import pack_elf, pack_symbol
-from esp_memory_map import is_code, is_data
 
 
 class XtensaElf(object):
@@ -100,7 +99,7 @@ class XtensaElf(object):
 
 
 class ElfSection(object):
-    def __init__(self, section_name, section_address, section_bytes):
+    def __init__(self, section_name, section_address, section_bytes, is_code_section=True):
         header = ElfSectionHeader32l()
 
         header.name = section_name
@@ -111,15 +110,11 @@ class ElfSection(object):
 
         header.content = section_bytes
         header.section_size = len(section_bytes)
-
-        if section_name in default_section_settings:
-            settings_to_use = default_section_settings[section_name]
-        elif is_code(section_address):
+        self.is_code = is_code_section
+        if is_code_section:
             settings_to_use = codeSettings
-        elif is_data(section_address):
-            settings_to_use = dataSettings
         else:
-            raise Exception("Can't find settings for 0x%08x" % section_address)
+            settings_to_use = dataSettings
 
         header.type = settings_to_use.type
         header.addralign = settings_to_use.addralign
@@ -142,12 +137,10 @@ class ElfSection(object):
         program_header.paddr = self.header.addr
         program_header.vaddr = self.header.addr
 
-        if is_code(self.header.addr):
+        if self.is_code:
             program_header.flags = 5    # R E
-        elif is_data(self.header.addr):
-            program_header.flags = 6    # RW
         else:
-            program_header.flags = 0
+            program_header.flags = 6    # RW
 
         self.program_header = program_header
 
